@@ -3,7 +3,6 @@ from io import BytesIO
 from typing import Mapping
 
 from PIL import Image, ImageDraw, ImageFont
-from PIL.ImageFont import FreeTypeFont
 
 _BASE_IMG = pathlib.Path("static/img.png")
 if not _BASE_IMG.exists():
@@ -27,7 +26,7 @@ def find_longest_prefix(text: str, max_width: int = 400) -> int:
         mid = (start + end) // 2
         current_text = text[:mid]
 
-        _, _, width, _ = FONT.getbbox(current_text)
+        _, _, width, _ = FONT.getbbox(current_text)  # type: ignore # bad upstream types
         if width <= max_width:
             start = mid + 1
         else:
@@ -47,8 +46,8 @@ def generate_honeypot_image(ip: str, headers: Mapping[str, str]) -> BytesIO:
     for line in headers_:
         while line:
             index = find_longest_prefix(line)
-            _, _, _, height = FONT.getbbox(line[:index])
-            draw.text((x, y), text=line[:index], font=FONT, fill=FILL)
+            _, _, _, height = FONT.getbbox(line[:index])  # type: ignore # bad upstream types
+            draw.text((x, y), text=line[:index], font=FONT, fill=FILL)  # type: ignore # bad upstream types
             y += height + 2
 
             line = line[index:]

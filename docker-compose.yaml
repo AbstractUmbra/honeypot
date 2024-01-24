@@ -1,0 +1,12 @@
+services:
+  honeypot:
+    ports:
+      - "8180:8080"
+    container_name: "honeypot"
+    build: .
+    networks:
+      main:
+
+networks:
+  main:
+    external: true

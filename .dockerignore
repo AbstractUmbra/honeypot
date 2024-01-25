@@ -1,0 +1,6 @@
+.git/
+.venv/
+.ruff-cache/
+.github/
+README.md
+LICENSE

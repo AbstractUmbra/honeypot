@@ -35,11 +35,11 @@ def find_longest_prefix(text: str, max_width: int = 400) -> int:
     return start
 
 
-def generate_honeypot_image(ip: str, headers: Mapping[str, str]) -> BytesIO:
+def generate_honeypot_image(ip: str, path: str, method: str, headers: Mapping[str, str]) -> BytesIO:
     image = Image.open(BASE_DATA)
     draw = ImageDraw.Draw(image)
 
-    headers_ = [f"IP: {ip}", " ", "Headers:"]
+    headers_ = [f"IP: {ip}", f"Route: {path}", f"Method: {method}", " ", "Headers:"]
     headers_ += [f"{key}: {value}" for key, value in headers.items()]
 
     x, y = 305, 100

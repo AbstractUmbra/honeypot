@@ -1,22 +1,23 @@
 from __future__ import annotations
 
 import asyncio
+from typing import Any
 
-from fastapi import FastAPI, Request
-from fastapi.responses import Response
+from litestar import HttpMethod, Litestar, Request, route
 
 from .image import generate_honeypot_image
 
-app = FastAPI(debug=False, title="Welcome!", version="0.0.1", openapi_url=None, redoc_url=None, docs_url=None)
 
-
-@app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "TRACE"])  # type: ignore # starlette upstream bad types
-async def index(request: Request, full_path: str) -> Response:
+@route(path=["/", "/{full_path:path}"], http_method=list(HttpMethod), media_type="image/png")
+async def index(request: Request[Any, Any, Any], full_path: str = "/") -> bytes:
     assert request.client
 
     source_ip = request.headers.get("x-forwarded-for") or request.client.host
     headers = request.headers
 
-    image = await asyncio.to_thread(generate_honeypot_image, source_ip, request.url.path, request.method.upper(), headers)
+    image = await asyncio.to_thread(generate_honeypot_image, source_ip, full_path, request.method.upper(), headers)
 
-    return Response(content=image.read(), media_type="image/png")
+    return image.read()
+
+
+app = Litestar(route_handlers=[index])

@@ -1,6 +1,9 @@
 .git/
 .venv/
-.ruff-cache/
 .github/
+
+*.py[cod]
+.pdm-python
+
 README.md
 LICENSE

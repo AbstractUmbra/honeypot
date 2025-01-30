@@ -1,6 +1,6 @@
 import pathlib
+from collections.abc import Mapping
 from io import BytesIO
-from typing import Mapping
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -26,7 +26,7 @@ def find_longest_prefix(text: str, max_width: int = 400) -> int:
         mid = (start + end) // 2
         current_text = text[:mid]
 
-        _, _, width, _ = FONT.getbbox(current_text)  # type: ignore # bad upstream types
+        _, _, width, _ = FONT.getbbox(current_text)
         if width <= max_width:
             start = mid + 1
         else:
@@ -46,11 +46,11 @@ def generate_honeypot_image(ip: str, path: str, method: str, headers: Mapping[st
     for line in headers_:
         while line:
             index = find_longest_prefix(line)
-            _, _, _, height = FONT.getbbox(line[:index])  # type: ignore # bad upstream types
-            draw.text((x, y), text=line[:index], font=FONT, fill=FILL)  # type: ignore # bad upstream types
+            _, _, _, height = FONT.getbbox(line[:index])
+            draw.text((x, y), text=line[:index], font=FONT, fill=FILL)
             y += height + 2
 
-            line = line[index:]
+            line = line[index:]  # noqa: PLW2901 # intended
 
     output = BytesIO()
     image.save(output, "png")

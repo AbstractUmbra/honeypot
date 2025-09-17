@@ -2,6 +2,8 @@ services:
   honeypot:
     image: ghcr.io/abstractumbra/honeypot:latest
     container_name: "honeypot"
+    environment:
+      - WEB_PORT=8080
     ports:
-      - "8080:8080"
+      - 8080:8080
     restart: "unless-stopped"

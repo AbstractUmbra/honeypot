@@ -21,6 +21,8 @@ select = ["ALL"]
 ignore = [
     "ANN401",
     "COM812",
+    "CPY",
+    "D",
     "EM101",   # in this case this is okay
     "F401",
     "F402",
@@ -33,6 +35,7 @@ ignore = [
     "Q000",
     "RUF001",
     "RUF009",
+    "RUF067",
     "S101",    # assert is used for type checking in this codebase
     "SIM105",
     "TRY003",  # over-eager rule
@@ -80,6 +83,20 @@ inline-quotes = "double"
 "typing.TypeGuard".msg = "TypeGuard is fundamentally unsafe"
 "typing_extensions.TypeIs".msg = "TypeIs is fundamentally unsafe, even when using it as described to be safe"
 "typing_extensions.TypeGuard".msg = "TypeGuard is fundamentally unsafe"
+"typing.runtime_checkable".msg = "Runtime checkable is fundamentally unsafe."
+"typing_extensions.runtime_checkable".msg = "Runtime checkable is fundamentally unsafe."
+# these don't work as deferred imports, intentionally, because type checkers are dumb
+# and require they be imported directly from typing to work, this breaks the deferred re-export.
+"typing.Final".msg = "see https://github.com/microsoft/pyright/issues/9664#issuecomment-2574042580"
+"typing_extensions.Final".msg = "see https://github.com/microsoft/pyright/issues/9664#issuecomment-2574042580"
+"typing.final".msg = "see https://github.com/microsoft/pyright/issues/9664#issuecomment-2574042580"
+"typing_extensions.final".msg = "see https://github.com/microsoft/pyright/issues/9664#issuecomment-2574042580"
+
+[tool.ruff.lint.flake8-comprehensions]
+allow-dict-calls-with-keyword-arguments = true
+
+[tool.ruff.lint.flake8-import-conventions.aliases]
+"concurrent.futures" = "cf"
 
 [tool.pyright]
 venvPath = "."
